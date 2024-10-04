@@ -27,7 +27,7 @@ class QASections:
 				        {
 				            "role": "user",
 				            "content": f"""
-								Given the following Context, give five insightful questions and answer each one accurately in the following JSON format: {{"Question", "Answer"}}
+								Given the following Context, give five insightful questions about the text and answer each one accurately in the following JSON format: {{"Question", "Answer"}}
 
 								Context:
 								{chunk}
@@ -35,7 +35,7 @@ class QASections:
 					        }
 						]
 					)
-			print (text, output)
+			print (chunk, output)
 			outputs.append(output)
 		return questions
 
