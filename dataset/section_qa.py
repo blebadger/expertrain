@@ -2,7 +2,7 @@ from llama_cpp import Llama
 import json
 from datasets import load_dataset
 from tqdm import tqdm
-
+import torch
 
 class QASections:
 
@@ -19,24 +19,32 @@ class QASections:
 	def generate_qas(self):
 		# assumes dataset may be loaded in memory
 		#text = load_dataset(path)
-		outputs = []
-		for chunk in tqdm(self.chunks):
-			output = model.create_chat_completion(
-			      messages = [
-					{"role": "system", "content": "You are helpful assistant responsible for creating good questions from text and answering them."},
-				        {
-				            "role": "user",
-				            "content": f"""
-								Given the following Context, give five insightful questions about the text and answer each one accurately in the following JSON format: {{"Question", "Answer"}}
 
-								Context:
-								{chunk}
-							"""
-					        }
-						]
-					)
-			print (chunk, output)
-			outputs.append(output)
+		# divide chunks among GPUs
+		n_gpus = torch.cuda.device_count()
+		gpu_index = torch.cuda.current_device()
+		selected = len(self.chunks) // n_gpus
+		selected_chunks = self.chunks[gpu_index*selected: gpu_index*selected+selected]
+
+		outputs = []
+		for chunk in tqdm(selected_chunks):
+			if len(chunk) > 1:
+				output = model.create_chat_completion(
+				      messages = [
+						{"role": "system", "content": "You are helpful assistant responsible for creating good questions from text and answering them."},
+					        {
+					            "role": "user",
+					            "content": f"""
+									Given the following Context, give five insightful questions about the text and answer each one accurately in the following JSON format: {{"Question", "Answer"}}
+
+									Context:
+									{chunk}
+								"""
+						        }
+							]
+						)
+				print (chunk, output)
+				outputs.append(output)
 		return questions
 
 
