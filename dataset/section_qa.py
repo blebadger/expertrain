@@ -27,9 +27,7 @@ class QASections:
 				        {
 				            "role": "user",
 				            "content": f"""
-								Given the following context, return five insightful questions and answer each one accurately in JSON format. 
-								For example, one question for the context 'Theodore Roosevelt became the nation's youngest president on 1901' one question-answer pair could be as follows:
-								{{"When did Teddy Roosevelt ascend to the presidency?", "1901"}}
+								Given the following Context, give five insightful questions and answer each one accurately in the following JSON format: {{"Question", "Answer"}}
 
 								Context:
 								{chunk}
