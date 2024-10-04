@@ -3,6 +3,21 @@ import json
 from datasets import load_dataset
 from tqdm import tqdm
 import torch
+import argparse
+
+# Instantiate the parser
+parser = argparse.ArgumentParser(description='Optional app description')
+parser.add_argument('--n_gpus', type=int)
+parser.add_argument('--model_path', type=int)
+
+# n_gpus = args.n_gpus
+# if n_gpus > 1:
+# 	# divide chunks among GPUs
+# 	n_gpus = torch.cuda.device_count()
+# 	gpu_index = torch.cuda.current_device()
+# 	selected = len(self.chunks) // n_gpus
+# 	selected_chunks = self.chunks[gpu_index*selected: gpu_index*selected+selected]
+
 
 class QASections:
 
@@ -20,13 +35,8 @@ class QASections:
 		# assumes dataset may be loaded in memory
 		#text = load_dataset(path)
 
-		# divide chunks among GPUs
-		n_gpus = torch.cuda.device_count()
-		gpu_index = torch.cuda.current_device()
-		selected = len(self.chunks) // n_gpus
-		selected_chunks = self.chunks[gpu_index*selected: gpu_index*selected+selected]
-
 		outputs = []
+		async for gpu in n_gpu
 		for chunk in tqdm(selected_chunks):
 			if len(chunk) > 1:
 				output = model.create_chat_completion(
@@ -55,13 +65,15 @@ class QASections:
 
 
 if __name__ == '__main__':
+	args = parser.parse_args()
 	model = Llama(
-	model_path = '/home/bbadger/Desktop/llama-3-8b-instruct-Q8_0.gguf',
+	model_path = args.model_path,
 	n_gpu_layers = -1,
 	chat_format='llama-3',
 	verbose=False,
-	n_ctx=8196
-	)
+	n_ctx=8196,
+	)		
+
 	text = """ Washington, D.C., formally the District of Columbia and commonly known as Washington or D.C., is the capital city and federal district of the United States. The city is on the Potomac River, across from Virginia, and shares land borders with Maryland to its north and east. It was named for George Washington, the first president of the United States. The district is named for Columbia, the female personification of the nation.
 
 The U.S. Constitution in 1789 called for the creation of a federal district under the exclusive jurisdiction of the U.S. Congress. As such, Washington, D.C., is not part of any state, and is not one itself. The Residence Act, adopted on July 16, 1790, approved the creation of the capital district along the Potomac River. The city was founded in 1791, and the 6th Congress held the first session in the unfinished Capitol Building in 1800 after the capital moved from Philadelphia. In 1801, the District of Columbia, formerly part of Maryland and Virginia and including the existing settlements of Georgetown and Alexandria, was officially recognized as the federal district; initially, the city was a separate settlement within the larger district. In 1846, Congress returned the land originally ceded by Virginia, including the city of Alexandria. In 1871, it created a single municipality for the remaining portion of the district. There have been several unsuccessful efforts to make the district into a state since the 1880s; a statehood bill passed the House of Representatives in 2021 but was not adopted by the U.S. Senate.
