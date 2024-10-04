@@ -18,9 +18,9 @@ class QASections:
 
 	def generate_qas(self):
 		# assumes dataset may be loaded in memory
-		text = load_dataset(path)
+		#text = load_dataset(path)
 		outputs = []
-		for j in tqdm(len(self.chunks)):
+		for chunk in tqdm(self.chunks):
 			output = model.create_chat_completion(
 			      messages = [
 					{"role": "system", "content": "You are helpful assistant responsible for creating good questions from text and answering them."},
@@ -29,10 +29,10 @@ class QASections:
 				            "content": f"""
 								Given the following context, return five insightful questions and answer each one accurately in JSON format. 
 								For example, one question for the context 'Theodore Roosevelt became the nation's youngest president on 1901' one question-answer pair could be as follows:
-								\{"When did Teddy Roosevelt ascend to the presidency?", "1901"\}
+								{{"When did Teddy Roosevelt ascend to the presidency?", "1901"}}
 
 								Context:
-								{text[j]}
+								{chunk}
 							"""
 					        }
 						]
