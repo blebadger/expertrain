@@ -7,9 +7,9 @@ import argparse
 
 # Instantiate the parser
 parser = argparse.ArgumentParser(description='Optional app description')
-parser.add_argument('--n_gpus', type=int)
-parser.add_argument('--model_path', type=int)
-
+#parser.add_argument('--n_gpus', type=int)
+parser.add_argument('--model_path', type=str)
+print ('parser initialized')
 # n_gpus = args.n_gpus
 # if n_gpus > 1:
 # 	# divide chunks among GPUs
@@ -36,8 +36,7 @@ class QASections:
 		#text = load_dataset(path)
 
 		outputs = []
-		async for gpu in n_gpu
-		for chunk in tqdm(selected_chunks):
+		for chunk in tqdm(self.chunks):
 			if len(chunk) > 1:
 				output = model.create_chat_completion(
 				      messages = [
@@ -66,12 +65,14 @@ class QASections:
 
 if __name__ == '__main__':
 	args = parser.parse_args()
+	print ('Loading model from ', args.model_path)
 	model = Llama(
 	model_path = args.model_path,
 	n_gpu_layers = -1,
 	chat_format='llama-3',
 	verbose=False,
 	n_ctx=8196,
+	temperature=0.3
 	)		
 
 	text = """ Washington, D.C., formally the District of Columbia and commonly known as Washington or D.C., is the capital city and federal district of the United States. The city is on the Potomac River, across from Virginia, and shares land borders with Maryland to its north and east. It was named for George Washington, the first president of the United States. The district is named for Columbia, the female personification of the nation.
