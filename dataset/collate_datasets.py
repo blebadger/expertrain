@@ -1,5 +1,7 @@
 from datasets import concatenate_datasets, load_from_disk
+import argparse
 
+parser = argparse.ArgumentParser(description='Arguments for collation')
 parser.add_argument('--output_path', type=str)
 parser.add_argument('--n_gpus', type=int)
 
