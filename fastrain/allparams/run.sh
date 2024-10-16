@@ -10,8 +10,7 @@ OMP_NUM_THREADS=14 accelerate launch --config_file "configs/fsdp_config_allparam
 --log_level "info" \
 --logging_strategy "steps" \
 --evaluation_strategy "epoch" \
---save_strategy "steps" \
---save_steps 1 \
+--save_strategy "epoch" \
 --bf16 True \
 --packing False \
 --learning_rate 5e-5 \
