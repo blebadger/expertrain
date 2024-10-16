@@ -6,6 +6,8 @@ import torch
 import argparse
 import ast
 import re
+import requests
+from bs4 import BeautifulSoup
 
 # Instantiate the parser
 parser = argparse.ArgumentParser(description='Optional app description')
@@ -31,7 +33,6 @@ class QASections:
 		self.chunks = chunks
 		self.qa_outputs = []
 		self.unformatted_indices = []
-
 
 	@classmethod
 	def chunk_text_newlines(self, text, batch_size=7):
@@ -112,7 +113,16 @@ class QASections:
 
 if __name__ == '__main__':
 	args = parser.parse_args()
-	text = open('data/github_pages/all_pages.md', 'r').read()
+
+	# dataset load: expects a single string
+	cfr_itar_data = [{"part": i, "url": f"https://www.ecfr.gov/api/renderer/v1/content/enhanced/current/title-22?chapter=I&subchapter=M&part={i}", "content": ""} for i in range(120,131)]
+	for rec in cfr_itar_data:
+		response = requests.get(rec['url'])
+		soup = BeautifulSoup(response.text, 'html.parser')
+		texts = soup.findAll(text=True)
+		rec['content'] = ''.join(texts[:-1])
+	data = str(''.join([i['content'] for i in cfr_itar_data]))
+	text = data
 	print ('Loading model from ', args.model_path)
 	model = Llama(
 			model_path = args.model_path,
