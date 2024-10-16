@@ -195,7 +195,7 @@ def main(model_args, data_args, training_args):
 	trainer.train(resume_from_checkpoint=checkpoint)
 
 	if trainer.is_fsdp_enabled:
-		trainer.accelerator.state.fsdp.pluging.set_state.dict_type("FULL_STATE_DICT")
+		trainer.accelerator.state.fsdp_plugin.set_state.dict_type("FULL_STATE_DICT")
 	trainer.save_model()
 
 
