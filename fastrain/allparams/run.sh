@@ -19,6 +19,7 @@ OMP_NUM_THREADS=14 accelerate launch --config_file "configs/fsdp_config_allparam
 --warmup_ratio 0.0 \
 --max_grad_norm 1.0 \
 --output_dir "/dbfs/ml/ITAR_qa_full_llama3.1_8b" \
+--resume_from_checkpoint "/dbfs/ml/ITAR_qa_full_llama3.1_8b/checkpoint-2132" \
 --per_device_train_batch_size 4 \
 --per_device_eval_batch_size 4 \
 --gradient_checkpointing True \
